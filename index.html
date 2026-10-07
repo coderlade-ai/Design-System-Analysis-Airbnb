@@ -1,1 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airbnb: Vacation Rentals, Cabins, Beach Houses & More</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      /* Brand & Accent */
+      --colors-primary: #ff385c;            /* Rausch */
+      --colors-primary-active: #e00b41;     /* Rausch Active */
+      --colors-primary-disabled: #ffd1da;   /* Rausch Disabled */
+      --colors-luxe: #460479;               /* Luxe Purple */
+      --colors-plus: #92174d;               /* Plus Magenta */
+
+      /* Surface */
+      --colors-canvas: #ffffff;
+      --colors-surface-soft: #f7f7f7;
+      --colors-surface-strong: #f2f2f2;
+
+      /* Hairlines & Borders */
+      --colors-hairline: #dddddd;
+      --colors-hairline-soft: #ebebeb;
+      --colors-border-strong: #c1c1c1;
+
+      /* Text */
+      --colors-ink: #222222;
+      --colors-body: #3f3f3f;
+      --colors-muted: #6a6a6a;
+      --colors-muted-soft: #929292;
+      --colors-star-rating: #222222;
+      --colors-on-primary: #ffffff;
+
+      /* Semantic */
+      --colors-primary-error-text: #c13515;
+      --colors-legal-link: #428bff;
+      --colors-scrim: rgba(0, 0, 0, 0.5);
+
+      /* Typography Scale & Font Stack */
+      --font-family: "Circular", "Inter", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+      --typography-rating-display: 700 64px/1.1 var(--font-family);
+      --typography-display-xl: 700 28px/1.43 var(--font-family);
+      --typography-display-lg: 500 22px/1.18 var(--font-family);
+      --typography-display-md: 700 21px/1.43 var(--font-family);
+      --typography-display-sm: 600 20px/1.2 var(--font-family);
+      --typography-title-md: 600 16px/1.25 var(--font-family);
+      --typography-title-sm: 500 16px/1.25 var(--font-family);
+      --typography-body-md: 400 16px/1.5 var(--font-family);
+      --typography-body-sm: 400 14px/1.43 var(--font-family);
+      --typography-caption: 500 14px/1.29 var(--font-family);
+      --typography-caption-sm: 400 13px/1.23 var(--font-family);
+      --typography-badge: 600 11px/1.18 var(--font-family);
+      --typography-micro-label: 700 12px/1.33 var(--font-family);
+      --typography-uppercase-tag: 700 8px/1.25 var(--font-family);
+      --typography-nav-link: 600 16px/1.25 var(--font-family);
+
+      /* Radii */
+      --rounded-sm: 8px;
+      --rounded-md: 14px;
+      --rounded-xl: 32px;
+      --rounded-full: 9999px;
+
+      /* Spacing (8px base system) */
+      --spacing-xxs: 2px;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-base: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-section: 64px;
+
+      /* Elevation (Single Shadow Tier) */
+      --shadow-tier: rgba(0, 0, 0, 0.02) 0 0 0 1px, rgba(0, 0, 0, 0.04) 0 2px 6px 0, rgba(0, 0, 0, 0.1) 0 4px 8px 0;
+      --shadow-modal: 0 16px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+      --max-width: 1280px;
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--colors-canvas);
+      color: var(--colors-ink);
+      font-family: var(--font-family);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION
+       ========================================================================== */
+    .top-nav {
+      height: 80px;
+      background-color: var(--colors-canvas);
+      border-bottom: 1px solid var(--colors-hairline-soft);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-nav .nav-container {
+      max-width: var(--max-width);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Brand Logo */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--colors-primary);
+      text-decoration: none;
+    }
+
+    .brand-logo svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--colors-primary);
+    }
+
+    .brand-logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: block;
+    }
+
+    /* Three-product Top Nav Tabs */
+    .product-tabs {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xl);
+      height: 100%;
+    }
+
+    .product-tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 100%;
+      color: var(--colors-muted);
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.15s ease;
+      cursor: pointer;
+    }
+
+    .product-tab svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .product-tab:hover {
+      color: var(--colors-ink);
+    }
+
+    .product-tab.active {
+      color: var(--colors-ink);
+      font-weight: 600;
+    }
+
+    .product-tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--colors-ink);
+    }
+
+    .new-tag {
+      position: absolute;
+      top: 22px;
+      right: -24px;
+      background-color: var(--colors-surface-soft);
+      border: 1px solid var(--colors-hairline);
+      color: var(--colors-ink);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+      padding: 2px 5px;
+      border-radius: var(--rounded-full);
+      line-height: 1;
+    }
+
+    /* Nav Utilities */
+    .nav-utilities {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .nav-link-btn {
+      padding: 10px 14px;
+      border-radius: var(--rounded-full);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      transition: background 0.15s ease;
+    }
+
+    .nav-link-btn:hover {
+      background-color: var(--colors-surface-soft);
+    }
+
+    .nav-icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--rounded-full);
+      color: var(--colors-ink);
+      transition: background 0.15s ease;
+    }
+
+    .nav-icon-btn:hover {
+      background-color: var(--colors-surface-soft);
+    }
+
+    .user-pill-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 6px 6px 14px;
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-full);
+      background-color: var(--colors-canvas);
+      cursor: pointer;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .user-pill-btn:hover {
+      box-shadow: var(--shadow-tier);
+    }
+
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rounded-full);
+      background-color: var(--colors-surface-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--colors-muted);
+    }
+
+    /* User Menu Dropdown */
+    .user-dropdown {
+      position: absolute;
+      top: 72px;
+      right: 24px;
+      background: var(--colors-canvas);
+      border-radius: var(--rounded-md);
+      box-shadow: var(--shadow-tier);
+      border: 1px solid var(--colors-hairline-soft);
+      width: 240px;
+      padding: var(--spacing-sm) 0;
+      display: none;
+      z-index: 200;
+    }
+
+    .user-dropdown.show {
+      display: block;
+    }
+
+    .user-dropdown a {
+      display: block;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: var(--colors-ink);
+      font-weight: 400;
+    }
+
+    .user-dropdown a.strong {
+      font-weight: 600;
+    }
+
+    .user-dropdown a:hover {
+      background-color: var(--colors-surface-soft);
+    }
+
+    .user-dropdown hr {
+      border: none;
+      border-top: 1px solid var(--colors-hairline-soft);
+      margin: var(--spacing-sm) 0;
+    }
+
+    /* ==========================================================================
+       GLOBAL SEARCH BAR SECTION
+       ========================================================================== */
+    .search-band {
+      padding: var(--spacing-lg) 0 var(--spacing-xl);
+      background: var(--colors-canvas);
+      position: relative;
+    }
+
+    .search-bar-pill {
+      max-width: 850px;
+      height: 64px;
+      margin: 0 auto;
+      background: var(--colors-canvas);
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-tier);
+      display: flex;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .search-segment {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 24px;
+      border-radius: var(--rounded-full);
+      position: relative;
+      transition: background 0.15s ease;
+    }
+
+    .search-segment:hover, .search-segment.active {
+      background-color: var(--colors-surface-soft);
+    }
+
+    .search-segment + .search-segment::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 16px;
+      bottom: 16px;
+      width: 1px;
+      background-color: var(--colors-hairline);
+      pointer-events: none;
+    }
+
+    .search-segment:hover::before,
+    .search-segment.active::before,
+    .search-segment:hover + .search-segment::before,
+    .search-segment.active + .search-segment::before {
+      opacity: 0;
+    }
+
+    .search-segment-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--colors-ink);
+      letter-spacing: 0.2px;
+      margin-bottom: 2px;
+    }
+
+    .search-segment-value {
+      font-size: 14px;
+      color: var(--colors-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-segment.has-value .search-segment-value {
+      color: var(--colors-ink);
+      font-weight: 500;
+    }
+
+    /* Search Orb */
+    .search-orb-wrapper {
+      padding-right: 8px;
+    }
+
+    .search-orb {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--rounded-full);
+      background-color: var(--colors-primary);
+      color: var(--colors-on-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.1s active;
+    }
+
+    .search-orb:hover {
+      background-color: var(--colors-primary-active);
+    }
+
+    .search-orb:active {
+      transform: scale(0.96);
+    }
+
+    .search-orb svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 3.5;
+    }
+
+    /* Search Dropdowns Floating Panel */
+    .search-dropdown-panel {
+      position: absolute;
+      top: 76px;
+      left: 0;
+      right: 0;
+      background: var(--colors-canvas);
+      border-radius: var(--rounded-xl);
+      box-shadow: var(--shadow-modal);
+      border: 1px solid var(--colors-hairline-soft);
+      padding: var(--spacing-lg);
+      display: none;
+      z-index: 150;
+    }
+
+    .search-dropdown-panel.show {
+      display: block;
+    }
+
+    /* Destinations Grid */
+    .destinations-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .destination-item {
+      cursor: pointer;
+      border-radius: var(--rounded-md);
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+
+    .destination-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .destination-img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+      border-radius: var(--rounded-md);
+      border: 1px solid var(--colors-hairline);
+    }
+
+    .destination-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--colors-ink);
+      margin-top: 6px;
+    }
+
+    /* Date Picker Mock */
+    .calendar-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      padding: 8px 16px;
+    }
+
+    .calendar-month-title {
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .calendar-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .calendar-head {
+      font-size: 12px;
+      color: var(--colors-muted);
+      font-weight: 500;
+      padding-bottom: 8px;
+    }
+
+    .date-picker-day {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--colors-ink);
+      border-radius: var(--rounded-full);
+      cursor: pointer;
+      margin: 0 auto;
+      transition: background 0.15s ease;
+    }
+
+    .date-picker-day:hover:not(.empty) {
+      border: 1px solid var(--colors-ink);
+    }
+
+    .date-picker-day.selected {
+      background-color: var(--colors-ink);
+      color: var(--colors-canvas);
+      font-weight: 600;
+    }
+
+    .date-picker-day.in-range {
+      background-color: var(--colors-surface-soft);
+      border-radius: 0;
+    }
+
+    /* Guest Stepper */
+    .guest-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--colors-hairline-soft);
+    }
+
+    .guest-row:last-child {
+      border-bottom: none;
+    }
+
+    .guest-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--colors-ink);
+    }
+
+    .guest-info p {
+      font-size: 14px;
+      color: var(--colors-muted);
+    }
+
+    .stepper-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stepper-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rounded-full);
+      border: 1px solid var(--colors-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--colors-muted);
+      font-size: 18px;
+      line-height: 1;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .stepper-btn:hover:not(:disabled) {
+      border-color: var(--colors-ink);
+      color: var(--colors-ink);
+    }
+
+    .stepper-btn:disabled {
+      border-color: var(--colors-hairline-soft);
+      color: var(--colors-hairline);
+      cursor: not-allowed;
+    }
+
+    .stepper-count {
+      font-size: 16px;
+      font-weight: 500;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       CATEGORY STRIP
+       ========================================================================== */
+    .category-band {
+      border-bottom: 1px solid var(--colors-hairline-soft);
+      position: sticky;
+      top: 80px;
+      background: var(--colors-canvas);
+      z-index: 90;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .category-scroll-container {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 14px var(--spacing-lg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .category-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--colors-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      padding-bottom: 8px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .category-item svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .category-item span {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .category-item:hover {
+      color: var(--colors-ink);
+      border-bottom-color: var(--colors-hairline);
+    }
+
+    .category-item.active {
+      color: var(--colors-ink);
+      border-bottom-color: var(--colors-ink);
+    }
+
+    /* ==========================================================================
+       PROPERTY CARDS GRID (Marketplace Section)
+       ========================================================================== */
+    .listings-section {
+      padding: var(--spacing-xl) 0 var(--spacing-section);
+    }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-lg) var(--spacing-base);
+    }
+
+    .property-card {
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s ease;
+    }
+
+    .property-card-photo-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--rounded-md);
+      overflow: hidden;
+      background-color: var(--colors-surface-strong);
+      margin-bottom: 12px;
+    }
+
+    .property-card-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Floating Badges */
+    .guest-favorite-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      color: var(--colors-ink);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-tier);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .wishlist-heart-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rounded-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      transition: transform 0.15s ease;
+    }
+
+    .wishlist-heart-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .wishlist-heart-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: #ffffff;
+      stroke-width: 2;
+      fill: rgba(0, 0, 0, 0.4);
+      transition: fill 0.2s ease, stroke 0.2s ease;
+    }
+
+    .wishlist-heart-btn.saved svg {
+      fill: var(--colors-primary);
+      stroke: var(--colors-primary);
+    }
+
+    /* Carousel Nav Arrows */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border-radius: var(--rounded-full);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow-tier);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--colors-ink);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      z-index: 2;
+    }
+
+    .property-card-photo-wrapper:hover .carousel-arrow {
+      opacity: 1;
+    }
+
+    .carousel-arrow.prev { left: 8px; }
+    .carousel-arrow.next { right: 8px; }
+
+    .carousel-arrow:hover {
+      background: #ffffff;
+      transform: translateY(-50%) scale(1.06);
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      z-index: 2;
+    }
+
+    .carousel-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: var(--rounded-full);
+      background: rgba(255, 255, 255, 0.6);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .carousel-dot.active {
+      background: #ffffff;
+      transform: scale(1.25);
+    }
+
+    /* Card Meta */
+    .property-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .property-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .property-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      line-height: 1.25;
+    }
+
+    .property-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--colors-star-rating);
+    }
+
+    .property-rating svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--colors-star-rating);
+    }
+
+    .property-subtitle, .property-dates {
+      font-size: 14px;
+      color: var(--colors-muted);
+      line-height: 1.35;
+    }
+
+    .property-price {
+      font-size: 15px;
+      color: var(--colors-ink);
+      margin-top: 4px;
+    }
+
+    .property-price strong {
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       BUTTONS SYSTEM
+       ========================================================================== */
+    .button-primary {
+      background-color: var(--colors-primary);
+      color: var(--colors-on-primary);
+      border-radius: var(--rounded-sm);
+      height: 48px;
+      padding: 0 24px;
+      font-size: 16px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+      width: 100%;
+    }
+
+    .button-primary:hover {
+      background-color: var(--colors-primary-active);
+    }
+
+    .button-secondary {
+      background-color: var(--colors-canvas);
+      color: var(--colors-ink);
+      border: 1px solid var(--colors-ink);
+      border-radius: var(--rounded-sm);
+      height: 48px;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+
+    .button-secondary:hover {
+      background-color: var(--colors-surface-soft);
+    }
+
+    .button-tertiary-text {
+      color: var(--colors-ink);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+    }
+
+    .button-tertiary-text:hover {
+      color: var(--colors-body);
+    }
+
+    /* ==========================================================================
+       LISTING DETAIL MODAL (Two-Column Layout)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--colors-scrim);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      padding: 32px 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: var(--colors-canvas);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 92vh;
+      border-radius: var(--rounded-md);
+      overflow-y: auto;
+      box-shadow: var(--shadow-modal);
+      position: relative;
+    }
+
+    .modal-header-sticky {
+      position: sticky;
+      top: 0;
+      background: var(--colors-canvas);
+      height: 64px;
+      border-bottom: 1px solid var(--colors-hairline-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 10;
+    }
+
+    .modal-close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--rounded-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--colors-ink);
+      transition: background 0.15s;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--colors-surface-soft);
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .modal-action-link {
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-body {
+      padding: 24px 32px 48px;
+    }
+
+    .detail-heading {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    .detail-subline {
+      font-size: 14px;
+      color: var(--colors-muted);
+      margin-bottom: 24px;
+    }
+
+    /* 5-Photo Gallery Grid */
+    .detail-photo-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 190px 190px;
+      gap: 8px;
+      border-radius: var(--rounded-md);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .photo-grid-hero {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+    }
+
+    .photo-grid-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .photo-grid-img:hover {
+      opacity: 0.94;
+    }
+
+    /* Two-Column Detail Body */
+    .detail-columns {
+      display: grid;
+      grid-template-columns: 64% 32%;
+      gap: 4%;
+      align-items: start;
+    }
+
+    .detail-main {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Host Header */
+    .host-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--colors-hairline-soft);
+    }
+
+    .host-header-text h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--colors-ink);
+    }
+
+    .host-header-text p {
+      font-size: 14px;
+      color: var(--colors-muted);
+      margin-top: 4px;
+    }
+
+    .host-avatar-large {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--rounded-full);
+      object-fit: cover;
+    }
+
+    /* 64px Laurel Wreath Rating Display Card */
+    .rating-display-card {
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-md);
+      padding: 24px;
+      text-align: center;
+      background: var(--colors-canvas);
+    }
+
+    .rating-hero-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .rating-number-64 {
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--colors-ink);
+      line-height: 1;
+    }
+
+    .laurel-wreath-icon {
+      width: 44px;
+      height: 44px;
+      color: var(--colors-ink);
+    }
+
+    .rating-tagline {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin: 8px 0 4px;
+    }
+
+    .rating-subtext {
+      font-size: 14px;
+      color: var(--colors-muted);
+      max-width: 460px;
+      margin: 0 auto 20px;
+    }
+
+    .rating-breakdown-row {
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid var(--colors-hairline-soft);
+      padding-top: 16px;
+      text-align: left;
+    }
+
+    .rating-sub-stat .stat-name {
+      font-size: 12px;
+      color: var(--colors-muted);
+    }
+
+    .rating-sub-stat .stat-score {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--colors-ink);
+    }
+
+    /* Amenities */
+    .amenities-section h4 {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--colors-ink);
+      margin-bottom: 20px;
+    }
+
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .amenity-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 16px;
+      color: var(--colors-body);
+    }
+
+    .amenity-row svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--colors-ink);
+      fill: none;
+    }
+
+    /* Host Card Component */
+    .host-card {
+      border: 1px solid var(--colors-hairline-soft);
+      border-radius: var(--rounded-md);
+      padding: 24px;
+      background: var(--colors-surface-soft);
+    }
+
+    .host-card-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .host-card-details h5 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .host-card-details p {
+      font-size: 13px;
+      color: var(--colors-muted);
+    }
+
+    /* Reviews Card (2-column grid) */
+    .reviews-card h4 {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--colors-ink);
+      margin-bottom: 20px;
+    }
+
+    .reviews-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .review-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .reviewer-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reviewer-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--rounded-full);
+      object-fit: cover;
+    }
+
+    .reviewer-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .reviewer-date {
+      font-size: 13px;
+      color: var(--colors-muted);
+    }
+
+    .review-body {
+      font-size: 15px;
+      color: var(--colors-body);
+      line-height: 1.45;
+    }
+
+    /* Sticky Reservation Card */
+    .sticky-reservation-rail {
+      position: sticky;
+      top: 96px;
+    }
+
+    .reservation-card {
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-md);
+      padding: 24px;
+      box-shadow: var(--shadow-tier);
+      background: var(--colors-canvas);
+    }
+
+    .res-price-header {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .res-price-amount {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--colors-ink);
+    }
+
+    .res-price-unit {
+      font-size: 15px;
+      color: var(--colors-muted);
+    }
+
+    .res-inputs-box {
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-sm);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .res-dates-row {
+      display: flex;
+      border-bottom: 1px solid var(--colors-hairline);
+    }
+
+    .res-date-cell {
+      flex: 1;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .res-date-cell:first-child {
+      border-right: 1px solid var(--colors-hairline);
+    }
+
+    .res-date-cell label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--colors-ink);
+    }
+
+    .res-date-cell span {
+      font-size: 14px;
+      color: var(--colors-ink);
+    }
+
+    .res-guests-cell {
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .res-guests-cell label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--colors-ink);
+    }
+
+    .res-guests-cell span {
+      font-size: 14px;
+      color: var(--colors-ink);
+    }
+
+    .res-notice {
+      text-align: center;
+      font-size: 13px;
+      color: var(--colors-muted);
+      margin: 12px 0 20px;
+    }
+
+    .fee-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 12px;
+    }
+
+    .fee-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--colors-body);
+    }
+
+    .fee-divider {
+      height: 1px;
+      background: var(--colors-hairline-soft);
+      margin: 8px 0;
+    }
+
+    .fee-total-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--colors-ink);
+    }
+
+    /* ==========================================================================
+       HOMEPAGE CITY LINK GRID (6-Column Desktop)
+       ========================================================================== */
+    .city-grid-section {
+      background-color: var(--colors-surface-soft);
+      padding: var(--spacing-section) 0;
+      border-top: 1px solid var(--colors-hairline-soft);
+    }
+
+    .city-grid-heading {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--colors-ink);
+      margin-bottom: 24px;
+    }
+
+    .city-subtabs {
+      display: flex;
+      gap: 24px;
+      border-bottom: 1px solid var(--colors-hairline);
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+
+    .city-subtab {
+      padding-bottom: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--colors-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .city-subtab.active {
+      color: var(--colors-ink);
+      font-weight: 600;
+      border-bottom-color: var(--colors-ink);
+    }
+
+    .city-links-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 24px 16px;
+    }
+
+    .city-link-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .city-link-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--colors-ink);
+    }
+
+    .city-link-subtitle {
+      font-size: 13px;
+      color: var(--colors-muted);
+    }
+
+    /* ==========================================================================
+       FOOTER LIGHT & LEGAL BAND
+       ========================================================================== */
+    .footer-light {
+      background-color: var(--colors-canvas);
+      padding: 48px 0 24px;
+      border-top: 1px solid var(--colors-hairline-soft);
+    }
+
+    .footer-columns-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px 24px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--colors-hairline-soft);
+    }
+
+    .footer-col h5 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin-bottom: 16px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links-list a {
+      font-size: 14px;
+      color: var(--colors-ink);
+      transition: color 0.15s;
+    }
+
+    .footer-links-list a:hover {
+      text-decoration: underline;
+    }
+
+    .legal-band {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      font-size: 13px;
+      color: var(--colors-muted);
+    }
+
+    .legal-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .legal-left a:hover {
+      text-decoration: underline;
+    }
+
+    .legal-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .legal-picker-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--colors-ink);
+    }
+
+    .legal-picker-btn:hover {
+      text-decoration: underline;
+    }
+
+    .social-icons-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--colors-ink);
+    }
+
+    .social-icons-row svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATION
+       ========================================================================== */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--colors-ink);
+      color: var(--colors-canvas);
+      padding: 12px 24px;
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-modal);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast-pill.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 1128px) {
+      .listings-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .city-links-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 950px) {
+      .detail-columns {
+        grid-template-columns: 1fr;
+      }
+      .sticky-reservation-rail {
+        position: static;
+        margin-top: 32px;
+      }
+      .detail-photo-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 240px 140px;
+      }
+      .photo-grid-hero {
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
+      }
+    }
+
+    @media (max-width: 744px) {
+      .product-tabs {
+        display: none;
+      }
+      .listings-grid {
+        grid-template-columns: 1fr;
+      }
+      .city-links-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-columns-3 {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .legal-band {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .search-bar-pill {
+        height: 54px;
+      }
+      .search-segment {
+        padding: 0 12px;
+      }
+      .search-segment:not(:first-child) {
+        display: none;
+      }
+      .calendar-container {
+        grid-template-columns: 1fr;
+      }
+      .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP NAVIGATION
+       ========================================================================== -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <!-- Flush Left: Airbnb Wordmark -->
+      <a href="#" class="brand-logo" aria-label="Airbnb Home">
+        <svg viewBox="0 0 32 32">
+          <path d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.332.146 2.502-1.077 4.908-3.149 6.223-1.42.902-3.125 1.353-4.872 1.353-2.316 0-4.321-.77-6.046-2.318C13.697 30.622 11.692 31.392 9.376 31.392c-1.747 0-3.452-.451-4.872-1.353-2.072-1.315-3.295-3.721-3.149-6.223.05-.86.293-1.741.96-3.332l.145-.353c.986-2.296 5.146-11.006 7.1-14.836l.533-1.025C11.381 1.963 12.836 1 14.844 1H16zm0 2c-1.295 0-2.317.653-3.376 2.544l-.513.987C10.16 10.38 6.014 19.06 5.044 21.318c-.588 1.405-.79 2.115-.828 2.766-.104 1.785.768 3.504 2.247 4.442 1.018.647 2.244.97 3.493.97 2.235 0 4.195-.97 5.76-2.736l.284-.33.284.33c1.565 1.766 3.525 2.736 5.76 2.736 1.249 0 2.475-.323 3.493-.97 1.479-.938 2.351-2.657 2.247-4.442-.038-.651-.24-1.361-.828-2.766l-.145-.353C25.986 19.06 21.84 10.38 19.89 6.531l-.514-.987C18.317 3.653 17.295 3 16 3zm0 15c2.209 0 4 1.791 4 4 0 1.905-1.332 3.499-3.106 3.899L16 26c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4zm0 2c-1.105 0-2 .895-2 2 0 1.047.804 1.906 1.83 1.994L16 24c1.105 0 2-.895 2-2 0-1.105-.895-2-2-2z"/>
+        </svg>
+        <span class="brand-logo-text">airbnb</span>
+      </a>
+
+      <!-- Dead Center: Three-Product Top Nav Tabs -->
+      <nav class="product-tabs" aria-label="Main categories">
+        <div class="product-tab active" data-tab="homes">
+          <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+          <span>Stays</span>
+        </div>
+        <div class="product-tab" data-tab="experiences">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5l-4-2 2-4 4 2z"/></svg>
+          <span>Experiences</span>
+          <span class="new-tag">NEW</span>
+        </div>
+        <div class="product-tab" data-tab="services">
+          <svg viewBox="0 0 24 24"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6l2.1-2.1"/></svg>
+          <span>Services</span>
+          <span class="new-tag">NEW</span>
+        </div>
+      </nav>
+
+      <!-- Flush Right: Account Utilities -->
+      <div class="nav-utilities">
+        <a href="#" class="nav-link-btn">Airbnb your home</a>
+        <button class="nav-icon-btn" aria-label="Language and currency picker">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </button>
+        <button class="user-pill-btn" id="userMenuBtn" aria-expanded="false" aria-label="User profile and menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <div class="user-avatar-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="user-dropdown" id="userDropdown">
+          <a href="#" class="strong">Sign up</a>
+          <a href="#">Log in</a>
+          <hr>
+          <a href="#">Airbnb your home</a>
+          <a href="#">Host an experience</a>
+          <a href="#">Help Center</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       GLOBAL PILL SEARCH BAR
+       ========================================================================== -->
+  <section class="search-band">
+    <div class="container">
+      <div class="search-bar-pill" id="globalSearchBar">
+        <!-- Segment 1: Where -->
+        <div class="search-segment" id="segWhere" tabindex="0">
+          <span class="search-segment-label">Where</span>
+          <span class="search-segment-value" id="valWhere">Search destinations</span>
+        </div>
+
+        <!-- Segment 2: When -->
+        <div class="search-segment" id="segWhen" tabindex="0">
+          <span class="search-segment-label">When</span>
+          <span class="search-segment-value" id="valWhen">Add dates</span>
+        </div>
+
+        <!-- Segment 3: Who -->
+        <div class="search-segment" id="segWho" tabindex="0">
+          <span class="search-segment-label">Who</span>
+          <span class="search-segment-value" id="valWho">Add guests</span>
+        </div>
+
+        <!-- Rausch Search Orb -->
+        <div class="search-orb-wrapper">
+          <button class="search-orb" id="searchOrbBtn" aria-label="Perform search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Floating Dropdown Panels -->
+        <!-- Destination Panel -->
+        <div class="search-dropdown-panel" id="panelWhere">
+          <h4 style="font-size:14px; font-weight:700; margin-bottom:16px;">Search by region</h4>
+          <div class="destinations-grid">
+            <div class="destination-item" data-dest="Flexible (I'm flexible)">
+              <img class="destination-img" src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=300&q=80" alt="World map">
+              <div class="destination-title">I'm flexible</div>
+            </div>
+            <div class="destination-item" data-dest="Europe">
+              <img class="destination-img" src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=300&q=80" alt="Europe">
+              <div class="destination-title">Europe</div>
+            </div>
+            <div class="destination-item" data-dest="Japan">
+              <img class="destination-img" src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=300&q=80" alt="Japan">
+              <div class="destination-title">Japan</div>
+            </div>
+            <div class="destination-item" data-dest="Bali, Indonesia">
+              <img class="destination-img" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=300&q=80" alt="Bali">
+              <div class="destination-title">Indonesia</div>
+            </div>
+            <div class="destination-item" data-dest="Greece">
+              <img class="destination-img" src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=300&q=80" alt="Greece">
+              <div class="destination-title">Greece</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Calendar Date Picker Panel -->
+        <div class="search-dropdown-panel" id="panelWhen">
+          <div class="calendar-container">
+            <div>
+              <div class="calendar-month-title">October 2026</div>
+              <div class="calendar-days-grid">
+                <div class="calendar-head">Su</div><div class="calendar-head">Mo</div><div class="calendar-head">Tu</div>
+                <div class="calendar-head">We</div><div class="calendar-head">Th</div><div class="calendar-head">Fr</div><div class="calendar-head">Sa</div>
+                <div class="date-picker-day empty"></div><div class="date-picker-day empty"></div><div class="date-picker-day empty"></div><div class="date-picker-day empty"></div>
+                <div class="date-picker-day" data-date="Oct 1">1</div><div class="date-picker-day" data-date="Oct 2">2</div><div class="date-picker-day" data-date="Oct 3">3</div>
+                <div class="date-picker-day" data-date="Oct 4">4</div><div class="date-picker-day" data-date="Oct 5">5</div><div class="date-picker-day" data-date="Oct 6">6</div>
+                <div class="date-picker-day" data-date="Oct 7">7</div><div class="date-picker-day" data-date="Oct 8">8</div><div class="date-picker-day" data-date="Oct 9">9</div>
+                <div class="date-picker-day" data-date="Oct 10">10</div><div class="date-picker-day" data-date="Oct 11">11</div><div class="date-picker-day" data-date="Oct 12">12</div>
+                <div class="date-picker-day selected" data-date="Oct 13">13</div><div class="date-picker-day in-range" data-date="Oct 14">14</div><div class="date-picker-day in-range" data-date="Oct 15">15</div>
+                <div class="date-picker-day in-range" data-date="Oct 16">16</div><div class="date-picker-day in-range" data-date="Oct 17">17</div><div class="date-picker-day selected" data-date="Oct 18">18</div>
+                <div class="date-picker-day" data-date="Oct 19">19</div><div class="date-picker-day" data-date="Oct 20">20</div><div class="date-picker-day" data-date="Oct 21">21</div>
+                <div class="date-picker-day" data-date="Oct 22">22</div><div class="date-picker-day" data-date="Oct 23">23</div><div class="date-picker-day" data-date="Oct 24">24</div>
+                <div class="date-picker-day" data-date="Oct 25">25</div><div class="date-picker-day" data-date="Oct 26">26</div><div class="date-picker-day" data-date="Oct 27">27</div>
+                <div class="date-picker-day" data-date="Oct 28">28</div><div class="date-picker-day" data-date="Oct 29">29</div><div class="date-picker-day" data-date="Oct 30">30</div>
+                <div class="date-picker-day" data-date="Oct 31">31</div>
+              </div>
+            </div>
+            <div>
+              <div class="calendar-month-title">November 2026</div>
+              <div class="calendar-days-grid">
+                <div class="calendar-head">Su</div><div class="calendar-head">Mo</div><div class="calendar-head">Tu</div>
+                <div class="calendar-head">We</div><div class="calendar-head">Th</div><div class="calendar-head">Fr</div><div class="calendar-head">Sa</div>
+                <div class="date-picker-day" data-date="Nov 1">1</div><div class="date-picker-day" data-date="Nov 2">2</div><div class="date-picker-day" data-date="Nov 3">3</div>
+                <div class="date-picker-day" data-date="Nov 4">4</div><div class="date-picker-day" data-date="Nov 5">5</div><div class="date-picker-day" data-date="Nov 6">6</div>
+                <div class="date-picker-day" data-date="Nov 7">7</div><div class="date-picker-day" data-date="Nov 8">8</div><div class="date-picker-day" data-date="Nov 9">9</div>
+                <div class="date-picker-day" data-date="Nov 10">10</div><div class="date-picker-day" data-date="Nov 11">11</div><div class="date-picker-day" data-date="Nov 12">12</div>
+                <div class="date-picker-day" data-date="Nov 13">13</div><div class="date-picker-day" data-date="Nov 14">14</div><div class="date-picker-day" data-date="Nov 15">15</div>
+                <div class="date-picker-day" data-date="Nov 16">16</div><div class="date-picker-day" data-date="Nov 17">17</div><div class="date-picker-day" data-date="Nov 18">18</div>
+                <div class="date-picker-day" data-date="Nov 19">19</div><div class="date-picker-day" data-date="Nov 20">20</div><div class="date-picker-day" data-date="Nov 21">21</div>
+                <div class="date-picker-day" data-date="Nov 22">22</div><div class="date-picker-day" data-date="Nov 23">23</div><div class="date-picker-day" data-date="Nov 24">24</div>
+                <div class="date-picker-day" data-date="Nov 25">25</div><div class="date-picker-day" data-date="Nov 26">26</div><div class="date-picker-day" data-date="Nov 27">27</div>
+                <div class="date-picker-day" data-date="Nov 28">28</div><div class="date-picker-day" data-date="Nov 29">29</div><div class="date-picker-day" data-date="Nov 30">30</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest Counter Stepper Panel -->
+        <div class="search-dropdown-panel" id="panelWho" style="max-width: 400px; left: auto; right: 0;">
+          <div class="guest-row">
+            <div class="guest-info">
+              <h4>Adults</h4>
+              <p>Ages 13 or above</p>
+            </div>
+            <div class="stepper-controls">
+              <button class="stepper-btn" id="subAdults" disabled>-</button>
+              <span class="stepper-count" id="countAdults">1</span>
+              <button class="stepper-btn" id="addAdults">+</button>
+            </div>
+          </div>
+          <div class="guest-row">
+            <div class="guest-info">
+              <h4>Children</h4>
+              <p>Ages 2–12</p>
+            </div>
+            <div class="stepper-controls">
+              <button class="stepper-btn" id="subChildren" disabled>-</button>
+              <span class="stepper-count" id="countChildren">0</span>
+              <button class="stepper-btn" id="addChildren">+</button>
+            </div>
+          </div>
+          <div class="guest-row">
+            <div class="guest-info">
+              <h4>Infants</h4>
+              <p>Under 2</p>
+            </div>
+            <div class="stepper-controls">
+              <button class="stepper-btn" id="subInfants" disabled>-</button>
+              <span class="stepper-count" id="countInfants">0</span>
+              <button class="stepper-btn" id="addInfants">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CATEGORY FILTER STRIP
+       ========================================================================== */ -->
+  <section class="category-band">
+    <div class="category-scroll-container" id="categoryStrip">
+      <div class="category-item active" data-cat="all">
+        <svg viewBox="0 0 32 32"><path d="M16 2L3 14h3v16h8v-8h4v8h8V14h3L16 2z"/></svg>
+        <span>Icons</span>
+      </div>
+      <div class="category-item" data-cat="pools">
+        <svg viewBox="0 0 32 32"><path d="M2 20c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2v4c-2 0-4-2-6-2s-4 2-6 2-4-2-6-2-4 2-6 2H2v-4zm6-14a4 4 0 1 1-4 4 4 4 0 0 1 4-4z"/></svg>
+        <span>Amazing pools</span>
+      </div>
+      <div class="category-item" data-cat="beach">
+        <svg viewBox="0 0 32 32"><path d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2zm0 4a10 10 0 0 1 9.8 8H6.2A10 10 0 0 1 16 6zm-10 10h20a10 10 0 0 1-20 0z"/></svg>
+        <span>Beachfront</span>
+      </div>
+      <div class="category-item" data-cat="cabins">
+        <svg viewBox="0 0 32 32"><path d="M16 3L2 15h4v14h20V15h4L16 3zm-2 16h4v8h-4v-8z"/></svg>
+        <span>Cabins</span>
+      </div>
+      <div class="category-item" data-cat="views">
+        <svg viewBox="0 0 32 32"><path d="M28 26H4V6h24v20zM6 24h20V8H6v16zm12-4l-4-5-3 4-2-2-3 4h14l-2-1z"/></svg>
+        <span>Amazing views</span>
+      </div>
+      <div class="category-item" data-cat="mansions">
+        <svg viewBox="0 0 32 32"><path d="M4 4h24v4H4V4zm2 6h20v18H6V10zm4 4v4h4v-4h-4zm8 0v4h4v-4h-4z"/></svg>
+        <span>Mansions</span>
+      </div>
+      <div class="category-item" data-cat="luxe">
+        <svg viewBox="0 0 32 32"><path d="M16 2l4 8h9l-7 6 3 9-9-5-9 5 3-9-7-6h9z"/></svg>
+        <span>Luxe</span>
+      </div>
+      <div class="category-item" data-cat="lake">
+        <svg viewBox="0 0 32 32"><path d="M2 18c3 0 5-2 8-2s5 2 8 2 5-2 8-2 3 1 4 2v4c-1-1-3-2-4-2s-5 2-8 2-5-2-8-2-5 2-8 2H2v-4z"/></svg>
+        <span>Lakefront</span>
+      </div>
+      <div class="category-item" data-cat="countryside">
+        <svg viewBox="0 0 32 32"><path d="M2 28h28v-4l-8-12-6 9-4-6-10 13z"/></svg>
+        <span>Countryside</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROPERTY CARDS GRID
+       ========================================================================== -->
+  <main class="listings-section">
+    <div class="container">
+      <div class="listings-grid" id="listingsGrid">
+        <!-- Rendered dynamically by JavaScript with high-res photography -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       CITY LINK GRID (Homepage Footer Section)
+       ========================================================================== -->
+  <section class="city-grid-section">
+    <div class="container">
+      <h2 class="city-grid-heading">Inspiration for future getaways</h2>
+      
+      <div class="city-subtabs">
+        <div class="city-subtab active">Popular</div>
+        <div class="city-subtab">Arts & culture</div>
+        <div class="city-subtab">Outdoors</div>
+        <div class="city-subtab">Mountains</div>
+        <div class="city-subtab">Beach</div>
+        <div class="city-subtab">Unique stays</div>
+      </div>
+
+      <div class="city-links-grid">
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Wilmington</span>
+          <span class="city-link-subtitle">Cottage rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Athens</span>
+          <span class="city-link-subtitle">Apartment rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Florence</span>
+          <span class="city-link-subtitle">Villa rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Kyoto</span>
+          <span class="city-link-subtitle">Traditional stays</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Banff</span>
+          <span class="city-link-subtitle">Cabin rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Barcelona</span>
+          <span class="city-link-subtitle">Loft rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Nice</span>
+          <span class="city-link-subtitle">Coastal stays</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Zurich</span>
+          <span class="city-link-subtitle">Chalet rentals</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Sedona</span>
+          <span class="city-link-subtitle">Desert retreats</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Maui</span>
+          <span class="city-link-subtitle">Beachfront homes</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Queenstown</span>
+          <span class="city-link-subtitle">Lakeview suites</span>
+        </a>
+        <a href="#" class="city-link-item">
+          <span class="city-link-title">Reykjavik</span>
+          <span class="city-link-subtitle">Northern lights cabins</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER LIGHT & LEGAL BAND
+       ========================================================================== -->
+  <footer class="footer-light">
+    <div class="container">
+      <div class="footer-columns-3">
+        <!-- Col 1: Support -->
+        <div class="footer-col">
+          <h5>Support</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">AirCover</a></li>
+            <li><a href="#">Anti-discrimination</a></li>
+            <li><a href="#">Disability support</a></li>
+            <li><a href="#">Cancellation options</a></li>
+            <li><a href="#">Report neighborhood concern</a></li>
+          </ul>
+        </div>
+        <!-- Col 2: Hosting -->
+        <div class="footer-col">
+          <h5>Hosting</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">Airbnb your home</a></li>
+            <li><a href="#">AirCover for Hosts</a></li>
+            <li><a href="#">Hosting resources</a></li>
+            <li><a href="#">Community forum</a></li>
+            <li><a href="#">Hosting responsibly</a></li>
+            <li><a href="#">Airbnb-friendly apartments</a></li>
+          </ul>
+        </div>
+        <!-- Col 3: Airbnb -->
+        <div class="footer-col">
+          <h5>Airbnb</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">New features</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Investors</a></li>
+            <li><a href="#">Gift cards</a></li>
+            <li><a href="#">Airbnb.org emergency stays</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Legal Band -->
+      <div class="legal-band">
+        <div class="legal-left">
+          <span>© 2026 Airbnb, Inc.</span>
+          <span>·</span>
+          <a href="#">Privacy</a>
+          <span>·</span>
+          <a href="#">Terms</a>
+          <span>·</span>
+          <a href="#">Sitemap</a>
+          <span>·</span>
+          <a href="#">Company details</a>
+        </div>
+        <div class="legal-right">
+          <button class="legal-picker-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>English (US)</span>
+          </button>
+          <button class="legal-picker-btn">
+            <span>$ USD</span>
+          </button>
+          <div class="social-icons-row">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       LISTING DETAIL MODAL (Two-Column with Laurel Rating Display)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="listingDetailModal" role="dialog" aria-modal="true">
+    <div class="modal-sheet">
+      <!-- Sticky Modal Header -->
+      <div class="modal-header-sticky">
+        <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="modal-actions">
+          <button class="modal-action-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Share
+          </button>
+          <button class="modal-action-link" id="modalSaveBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            Save
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <h1 class="detail-heading" id="modalTitle">Close to Fethiye Aliyah Bali Beach & Sunset Panorama</h1>
+        <div class="detail-subline" id="modalSubline">★ 4.98 · 128 reviews · Superhost · Fethiye, Mugla, Turkey</div>
+
+        <!-- 5-Photo Grid Banner -->
+        <div class="detail-photo-grid" id="modalPhotoGrid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Two-Column Layout -->
+        <div class="detail-columns">
+          <!-- Left Column (64%): Details, Laurel Rating, Host, Amenities -->
+          <div class="detail-main">
+            <!-- Host Header Row -->
+            <div class="host-header-row">
+              <div class="host-header-text">
+                <h3 id="modalHostHeading">Entire villa hosted by Eleni</h3>
+                <p>6 guests · 3 bedrooms · 4 beds · 3.5 baths</p>
+              </div>
+              <img class="host-avatar-large" id="modalHostAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Host avatar">
+            </div>
+
+            <!-- Signature Rating Display Card (64px with Laurel Wreaths) -->
+            <div class="rating-display-card">
+              <div class="rating-hero-flex">
+                <!-- Left Laurel Ornament -->
+                <svg class="laurel-wreath-icon" viewBox="0 0 32 32" fill="currentColor">
+                  <path d="M12 2C8 6 6 12 7 18c-3-2-4-6-3-9 0 0-4 6-2 11 1 3 3 5 5 6-3 1-6 0-8-2 1 4 4 7 8 8 2 0 4-1 6-2-2 3-5 5-9 5 4 2 9 1 12-2 3-3 4-8 4-13-1-7-5-14-11-18z"/>
+                </svg>
+                <div class="rating-number-64" id="modalRatingNum">4.98</div>
+                <!-- Right Laurel Ornament -->
+                <svg class="laurel-wreath-icon" viewBox="0 0 32 32" fill="currentColor" style="transform: scaleX(-1);">
+                  <path d="M12 2C8 6 6 12 7 18c-3-2-4-6-3-9 0 0-4 6-2 11 1 3 3 5 5 6-3 1-6 0-8-2 1 4 4 7 8 8 2 0 4-1 6-2-2 3-5 5-9 5 4 2 9 1 12-2 3-3 4-8 4-13-1-7-5-14-11-18z"/>
+                </svg>
+              </div>
+              <div class="rating-tagline">Guest favorite</div>
+              <div class="rating-subtext">One of the most loved homes on Airbnb based on ratings, reviews, and reliability.</div>
+              <div class="rating-breakdown-row">
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Cleanliness</div>
+                  <div class="stat-score">5.0</div>
+                </div>
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Accuracy</div>
+                  <div class="stat-score">4.9</div>
+                </div>
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Check-in</div>
+                  <div class="stat-score">5.0</div>
+                </div>
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Communication</div>
+                  <div class="stat-score">5.0</div>
+                </div>
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Location</div>
+                  <div class="stat-score">4.9</div>
+                </div>
+                <div class="rating-sub-stat">
+                  <div class="stat-name">Value</div>
+                  <div class="stat-score">4.8</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Host Highlights -->
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; gap:16px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <div>
+                  <h4 style="font-size:16px; font-weight:600;">Eleni is a Superhost</h4>
+                  <p style="font-size:14px; color:var(--colors-muted);">Superhosts are experienced, highly rated hosts committed to great stays.</p>
+                </div>
+              </div>
+              <div style="display:flex; gap:16px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <div>
+                  <h4 style="font-size:16px; font-weight:600;">Free cancellation before Oct 15</h4>
+                  <p style="font-size:14px; color:var(--colors-muted);">Get a full refund if your travel plans change.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amenities Section -->
+            <div class="amenities-section">
+              <h4>What this place offers</h4>
+              <div class="amenities-grid">
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><path d="M2 20c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/><circle cx="12" cy="6" r="3"/></svg>
+                  <span>Waterfront & private beach access</span>
+                </div>
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <span>Fast Wi-Fi (280 Mbps)</span>
+                </div>
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+                  <span>Dedicated workspace</span>
+                </div>
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7 17l7 3 7-3a10 10 0 0 0-7-17z"/></svg>
+                  <span>Private heated infinity pool</span>
+                </div>
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+                  <span>Free parking on premises</span>
+                </div>
+                <div class="amenity-row">
+                  <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
+                  <span>Central air conditioning</span>
+                </div>
+              </div>
+              <button class="button-secondary">Show all 34 amenities</button>
+            </div>
+
+            <!-- Host Card Component -->
+            <div class="host-card">
+              <div class="host-card-top">
+                <img class="host-avatar-large" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Eleni">
+                <div class="host-card-details">
+                  <h5>Hosted by Eleni</h5>
+                  <p>Superhost · 5 years hosting</p>
+                </div>
+              </div>
+              <p style="font-size:14px; color:var(--colors-body); margin-bottom:16px;">
+                "I love welcoming travelers from across the world to the Turkish Riviera. My goal is to make sure your holiday is peaceful, unforgettable, and authentic."
+              </p>
+              <div style="display:flex; gap:32px; font-size:13px; color:var(--colors-muted); margin-bottom:18px;">
+                <div>Response rate: <strong style="color:var(--colors-ink);">100%</strong></div>
+                <div>Responds within: <strong style="color:var(--colors-ink);">1 hour</strong></div>
+              </div>
+              <button class="button-secondary">Contact host</button>
+            </div>
+
+            <!-- Reviews 2-Column Grid -->
+            <div class="reviews-card">
+              <h4>Reviews</h4>
+              <div class="reviews-grid-2col">
+                <div class="review-item">
+                  <div class="reviewer-meta">
+                    <img class="reviewer-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="Marcus">
+                    <div>
+                      <div class="reviewer-name">Marcus</div>
+                      <div class="reviewer-date">September 2026</div>
+                    </div>
+                  </div>
+                  <div class="review-body">
+                    "The sunset views from the terrace are surreal. The pool temperature was perfect and Eleni provided wonderful local restaurant recommendations!"
+                  </div>
+                </div>
+                <div class="review-item">
+                  <div class="reviewer-meta">
+                    <img class="reviewer-avatar" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80" alt="Sarah">
+                    <div>
+                      <div class="reviewer-name">Sarah</div>
+                      <div class="reviewer-date">August 2026</div>
+                    </div>
+                  </div>
+                  <div class="review-body">
+                    "Even better than the photos. Spotlessly clean, peaceful neighborhood, and the kitchen was fully stocked. Will definitely book again next year."
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (32%): Sticky Reservation Card -->
+          <div class="sticky-reservation-rail">
+            <div class="reservation-card">
+              <div class="res-price-header">
+                <span class="res-price-amount" id="resCardPrice">$340</span>
+                <span class="res-price-unit">night</span>
+              </div>
+
+              <!-- Reservation Date / Guest Inputs Box -->
+              <div class="res-inputs-box">
+                <div class="res-dates-row">
+                  <div class="res-date-cell">
+                    <label>CHECK-IN</label>
+                    <span id="resCheckinText">10/13/2026</span>
+                  </div>
+                  <div class="res-date-cell">
+                    <label>CHECKOUT</label>
+                    <span id="resCheckoutText">10/18/2026</span>
+                  </div>
+                </div>
+                <div class="res-guests-cell">
+                  <label>GUESTS</label>
+                  <span id="resGuestText">2 guests</span>
+                </div>
+              </div>
+
+              <!-- Primary CTA in Rausch -->
+              <button class="button-primary" id="reserveBtn">Reserve</button>
+              <div class="res-notice">You won't be charged yet</div>
+
+              <!-- Dynamic Fee Calculation Breakdown -->
+              <div class="fee-breakdown">
+                <div class="fee-line">
+                  <span id="feeBaseLabel">$340 x 5 nights</span>
+                  <span id="feeBaseAmount">$1,700</span>
+                </div>
+                <div class="fee-line">
+                  <span>Cleaning fee</span>
+                  <span>$120</span>
+                </div>
+                <div class="fee-line">
+                  <span>Airbnb service fee</span>
+                  <span id="feeServiceAmount">$185</span>
+                </div>
+                <div class="fee-divider"></div>
+                <div class="fee-total-line">
+                  <span>Total before taxes</span>
+                  <span id="feeTotalAmount">$2,005</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-pill" id="toastPill">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMsg">Reservation request submitted!</span>
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT APPLICATION LOGIC
+       ========================================================================== -->
+  <script>
+    /* --------------------------------------------------------------------------
+       1. MOCK MARKETPLACE DATA (Curated high-res architectural photos)
+       -------------------------------------------------------------------------- */
+    const propertiesData = [
+      {
+        id: "prop-1",
+        category: "pools",
+        title: "Fethiye, Turkey",
+        subtitle: "Close to Bali Beach & Mountain Panorama",
+        dates: "Oct 13 – 18",
+        price: 340,
+        rating: 4.98,
+        reviewsCount: 128,
+        guestFavorite: true,
+        host: "Eleni",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-2",
+        category: "beach",
+        title: "Oia, Santorini, Greece",
+        subtitle: "Direct Caldera view & hot tub",
+        dates: "Nov 2 – 7",
+        price: 495,
+        rating: 4.95,
+        reviewsCount: 210,
+        guestFavorite: true,
+        host: "Nikos",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-3",
+        category: "cabins",
+        title: "Aspen, Colorado, US",
+        subtitle: "Ski-in / ski-out luxury chalet",
+        dates: "Dec 10 – 15",
+        price: 720,
+        rating: 4.99,
+        reviewsCount: 88,
+        guestFavorite: true,
+        host: "Sarah & Dave",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-4",
+        category: "views",
+        title: "Amalfi, Italy",
+        subtitle: "Clifftop villa overlooking Positano",
+        dates: "Oct 24 – 29",
+        price: 580,
+        rating: 4.92,
+        reviewsCount: 95,
+        guestFavorite: false,
+        host: "Matteo",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-5",
+        category: "pools",
+        title: "Ubud, Bali, Indonesia",
+        subtitle: "Bamboo palace in the sacred river valley",
+        dates: "Nov 15 – 20",
+        price: 290,
+        rating: 4.97,
+        reviewsCount: 340,
+        guestFavorite: true,
+        host: "Wayan",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-6",
+        category: "luxe",
+        title: "Cape Town, South Africa",
+        subtitle: "Modernist glass home with ocean infinity deck",
+        dates: "Jan 12 – 18",
+        price: 850,
+        rating: 4.96,
+        reviewsCount: 76,
+        guestFavorite: true,
+        host: "Andre",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-7",
+        category: "countryside",
+        title: "Tuscany, Italy",
+        subtitle: "16th-century stone farmhouse among olive groves",
+        dates: "Nov 5 – 10",
+        price: 410,
+        rating: 4.94,
+        reviewsCount: 162,
+        guestFavorite: true,
+        host: "Giulia",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "prop-8",
+        category: "lake",
+        title: "Lake Como, Italy",
+        subtitle: "Historic villa with private dock & gardens",
+        dates: "Oct 19 – 24",
+        price: 640,
+        rating: 4.98,
+        reviewsCount: 184,
+        guestFavorite: true,
+        host: "Alessandro",
+        hostType: "Superhost",
+        images: [
+          "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80"
+        ]
+      }
+    ];
+
+    // State
+    const activeCarouselIndices = {};
+    const savedWishlist = new Set();
+    let currentSelectedProperty = propertiesData[0];
+    let guestCounts = { adults: 1, children: 0, infants: 0 };
+    let selectedDates = { checkin: "Oct 13", checkout: "Oct 18", nights: 5 };
+
+    /* --------------------------------------------------------------------------
+       2. RENDER PROPERTY CARDS
+       -------------------------------------------------------------------------- */
+    const listingsGrid = document.getElementById("listingsGrid");
+
+    function renderPropertyCards(items) {
+      listingsGrid.innerHTML = "";
+      items.forEach(prop => {
+        if (activeCarouselIndices[prop.id] === undefined) {
+          activeCarouselIndices[prop.id] = 0;
+        }
+        const currentIndex = activeCarouselIndices[prop.id];
+
+        const card = document.createElement("div");
+        card.className = "property-card";
+        card.dataset.id = prop.id;
+
+        card.innerHTML = `
+          <div class="property-card-photo-wrapper">
+            ${prop.guestFavorite ? '<div class="guest-favorite-badge">Guest favorite</div>' : ''}
+            <button class="wishlist-heart-btn ${savedWishlist.has(prop.id) ? 'saved' : ''}" data-prop-id="${prop.id}" aria-label="Save to wishlist">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <img class="property-card-photo" id="photo-${prop.id}" src="${prop.images[currentIndex]}" alt="${prop.title}">
+            <button class="carousel-arrow prev" data-prop-id="${prop.id}" aria-label="Previous photo">‹</button>
+            <button class="carousel-arrow next" data-prop-id="${prop.id}" aria-label="Next photo">›</button>
+            <div class="carousel-dots">
+              ${prop.images.map((_, i) => `<span class="carousel-dot ${i === currentIndex ? 'active' : ''}"></span>`).join("")}
+            </div>
+          </div>
+          <div class="property-meta">
+            <div class="property-meta-row">
+              <div class="property-title">${prop.title}</div>
+              <div class="property-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <span>${prop.rating.toFixed(2)}</span>
+              </div>
+            </div>
+            <div class="property-subtitle">${prop.subtitle}</div>
+            <div class="property-dates">${prop.dates}</div>
+            <div class="property-price"><strong>$${prop.price}</strong> night</div>
+          </div>
+        `;
+
+        listingsGrid.appendChild(card);
+      });
+    }
+
+    renderPropertyCards(propertiesData);
+
+    /* --------------------------------------------------------------------------
+       3. INTERACTIVE CAROUSEL & WISHLIST LISTENERS
+       -------------------------------------------------------------------------- */
+    listingsGrid.addEventListener("click", (e) => {
+      const heartBtn = e.target.closest(".wishlist-heart-btn");
+      if (heartBtn) {
+        e.stopPropagation();
+        const id = heartBtn.dataset.propId;
+        if (savedWishlist.has(id)) {
+          savedWishlist.delete(id);
+          heartBtn.classList.remove("saved");
+          showToast("Removed from wishlist");
+        } else {
+          savedWishlist.add(id);
+          heartBtn.classList.add("saved");
+          showToast("Saved to your wishlist!");
+        }
+        return;
+      }
+
+      const prevBtn = e.target.closest(".carousel-arrow.prev");
+      if (prevBtn) {
+        e.stopPropagation();
+        const id = prevBtn.dataset.propId;
+        const prop = propertiesData.find(p => p.id === id);
+        activeCarouselIndices[id] = (activeCarouselIndices[id] - 1 + prop.images.length) % prop.images.length;
+        updateCardImage(prop);
+        return;
+      }
+
+      const nextBtn = e.target.closest(".carousel-arrow.next");
+      if (nextBtn) {
+        e.stopPropagation();
+        const id = nextBtn.dataset.propId;
+        const prop = propertiesData.find(p => p.id === id);
+        activeCarouselIndices[id] = (activeCarouselIndices[id] + 1) % prop.images.length;
+        updateCardImage(prop);
+        return;
+      }
+
+      const card = e.target.closest(".property-card");
+      if (card) {
+        const id = card.dataset.id;
+        const prop = propertiesData.find(p => p.id === id);
+        openListingModal(prop);
+      }
+    });
+
+    function updateCardImage(prop) {
+      const img = document.getElementById(`photo-${prop.id}`);
+      const currentIndex = activeCarouselIndices[prop.id];
+      if (img) img.src = prop.images[currentIndex];
+
+      const card = document.querySelector(`.property-card[data-id="${prop.id}"]`);
+      if (card) {
+        const dots = card.querySelectorAll(".carousel-dot");
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("active", i === currentIndex);
+        });
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       4. CATEGORY STRIP FILTERING
+       -------------------------------------------------------------------------- */
+    const categoryStrip = document.getElementById("categoryStrip");
+    categoryStrip.addEventListener("click", (e) => {
+      const item = e.target.closest(".category-item");
+      if (!item) return;
+      categoryStrip.querySelectorAll(".category-item").forEach(el => el.classList.remove("active"));
+      item.classList.add("active");
+
+      const cat = item.dataset.cat;
+      if (cat === "all") {
+        renderPropertyCards(propertiesData);
+      } else {
+        const filtered = propertiesData.filter(p => p.category === cat);
+        renderPropertyCards(filtered.length ? filtered : propertiesData);
+      }
+    });
+
+    /* --------------------------------------------------------------------------
+       5. SEARCH BAR INTERACTION & FLOATING PANELS
+       -------------------------------------------------------------------------- */
+    const segWhere = document.getElementById("segWhere");
+    const segWhen = document.getElementById("segWhen");
+    const segWho = document.getElementById("segWho");
+
+    const panelWhere = document.getElementById("panelWhere");
+    const panelWhen = document.getElementById("panelWhen");
+    const panelWho = document.getElementById("panelWho");
+
+    function closeAllPanels() {
+      [panelWhere, panelWhen, panelWho].forEach(p => p.classList.remove("show"));
+      [segWhere, segWhen, segWho].forEach(s => s.classList.remove("active"));
+    }
+
+    segWhere.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = panelWhere.classList.contains("show");
+      closeAllPanels();
+      if (!isOpen) {
+        panelWhere.classList.add("show");
+        segWhere.classList.add("active");
+      }
+    });
+
+    segWhen.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = panelWhen.classList.contains("show");
+      closeAllPanels();
+      if (!isOpen) {
+        panelWhen.classList.add("show");
+        segWhen.classList.add("active");
+      }
+    });
+
+    segWho.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = panelWho.classList.contains("show");
+      closeAllPanels();
+      if (!isOpen) {
+        panelWho.classList.add("show");
+        segWho.classList.add("active");
+      }
+    });
+
+    // Destination selector
+    panelWhere.addEventListener("click", (e) => {
+      const destItem = e.target.closest(".destination-item");
+      if (!destItem) return;
+      const dest = destItem.dataset.dest;
+      document.getElementById("valWhere").textContent = dest;
+      segWhere.classList.add("has-value");
+      closeAllPanels();
+    });
+
+    // Calendar selection
+    panelWhen.addEventListener("click", (e) => {
+      const day = e.target.closest(".date-picker-day:not(.empty)");
+      if (!day) return;
+      document.getElementById("valWhen").textContent = "Oct 13 – Oct 18 (5 nights)";
+      segWhen.classList.add("has-value");
+      closeAllPanels();
+    });
+
+    // Stepper logic
+    function setupStepper(subBtnId, addBtnId, countId, type) {
+      const sub = document.getElementById(subBtnId);
+      const add = document.getElementById(addBtnId);
+      const counter = document.getElementById(countId);
+
+      add.addEventListener("click", (e) => {
+        e.stopPropagation();
+        guestCounts[type]++;
+        counter.textContent = guestCounts[type];
+        sub.disabled = (type === "adults" && guestCounts[type] <= 1) || (type !== "adults" && guestCounts[type] <= 0);
+        updateGuestDisplay();
+      });
+
+      sub.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (guestCounts[type] > (type === "adults" ? 1 : 0)) {
+          guestCounts[type]--;
+          counter.textContent = guestCounts[type];
+        }
+        sub.disabled = (type === "adults" && guestCounts[type] <= 1) || (type !== "adults" && guestCounts[type] <= 0);
+        updateGuestDisplay();
+      });
+    }
+
+    setupStepper("subAdults", "addAdults", "countAdults", "adults");
+    setupStepper("subChildren", "addChildren", "countChildren", "children");
+    setupStepper("subInfants", "addInfants", "countInfants", "infants");
+
+    function updateGuestDisplay() {
+      const total = guestCounts.adults + guestCounts.children;
+      let text = `${total} guest${total > 1 ? 's' : ''}`;
+      if (guestCounts.infants > 0) {
+        text += `, ${guestCounts.infants} infant${guestCounts.infants > 1 ? 's' : ''}`;
+      }
+      document.getElementById("valWho").textContent = text;
+      document.getElementById("resGuestText").textContent = text;
+      segWho.classList.add("has-value");
+    }
+
+    // Search Orb
+    document.getElementById("searchOrbBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeAllPanels();
+      showToast("Searching available stays...");
+    });
+
+    // Global outside click closes search panels
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".search-bar-pill")) {
+        closeAllPanels();
+      }
+      if (!e.target.closest(".user-pill-btn") && !e.target.closest(".user-dropdown")) {
+        document.getElementById("userDropdown").classList.remove("show");
+      }
+    });
+
+    // User Dropdown toggle
+    document.getElementById("userMenuBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("userDropdown").classList.toggle("show");
+    });
+
+    /* --------------------------------------------------------------------------
+       6. LISTING DETAIL MODAL LOGIC
+       -------------------------------------------------------------------------- */
+    const detailModal = document.getElementById("listingDetailModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    function openListingModal(prop) {
+      currentSelectedProperty = prop;
+      document.getElementById("modalTitle").textContent = prop.subtitle;
+      document.getElementById("modalSubline").textContent = `★ ${prop.rating.toFixed(2)} · ${prop.reviewsCount} reviews · Superhost · ${prop.title}`;
+      document.getElementById("modalHostHeading").textContent = `Entire villa hosted by ${prop.host}`;
+      document.getElementById("modalRatingNum").textContent = prop.rating.toFixed(2);
+      document.getElementById("resCardPrice").textContent = `$${prop.price}`;
+
+      // Populate 5-photo grid
+      const photoGrid = document.getElementById("modalPhotoGrid");
+      const imagesToDisplay = [
+        prop.images[0],
+        prop.images[1] || prop.images[0],
+        prop.images[2] || prop.images[0],
+        prop.images[3] || prop.images[0],
+        prop.images[0]
+      ];
+
+      photoGrid.innerHTML = `
+        <div class="photo-grid-hero">
+          <img class="photo-grid-img" src="${imagesToDisplay[0]}" alt="${prop.title}">
+        </div>
+        <div><img class="photo-grid-img" src="${imagesToDisplay[1]}" alt="Photo 2"></div>
+        <div><img class="photo-grid-img" src="${imagesToDisplay[2]}" alt="Photo 3"></div>
+        <div><img class="photo-grid-img" src="${imagesToDisplay[3]}" alt="Photo 4"></div>
+        <div><img class="photo-grid-img" src="${imagesToDisplay[4]}" alt="Photo 5"></div>
+      `;
+
+      // Recalculate price
+      updatePriceBreakdown(prop.price, selectedDates.nights);
+
+      detailModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function updatePriceBreakdown(pricePerNight, nights) {
+      const base = pricePerNight * nights;
+      const cleaning = 120;
+      const service = Math.round(base * 0.11);
+      const total = base + cleaning + service;
+
+      document.getElementById("feeBaseLabel").textContent = `$${pricePerNight} x ${nights} nights`;
+      document.getElementById("feeBaseAmount").textContent = `$${base.toLocaleString()}`;
+      document.getElementById("feeServiceAmount").textContent = `$${service.toLocaleString()}`;
+      document.getElementById("feeTotalAmount").textContent = `$${total.toLocaleString()}`;
+    }
+
+    closeModalBtn.addEventListener("click", () => {
+      detailModal.classList.remove("open");
+      document.body.style.overflow = "auto";
+    });
+
+    detailModal.addEventListener("click", (e) => {
+      if (e.target === detailModal) {
+        detailModal.classList.remove("open");
+        document.body.style.overflow = "auto";
+      }
+    });
+
+    // Reserve Button CTA
+    document.getElementById("reserveBtn").addEventListener("click", () => {
+      showToast(`Reservation confirmed for ${currentSelectedProperty.title}!`);
+    });
+
+    // Toast Utility
+    const toastPill = document.getElementById("toastPill");
+    const toastMsg = document.getElementById("toastMsg");
+    let toastTimeout;
+
+    function showToast(message) {
+      clearTimeout(toastTimeout);
+      toastMsg.textContent = message;
+      toastPill.classList.add("show");
+      toastTimeout = setTimeout(() => {
+        toastPill.classList.remove("show");
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
